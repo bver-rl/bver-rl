@@ -1,0 +1,16 @@
+# Eval config for Maze-Serpentine-EVAL-v0, matching experiments/maze/serpentine.yaml.
+# Checkpoints live under logs/rsl_rl/maze; pass that as --checkpoint_base_path.
+# `runs:` lists checkpoint FOLDER names, not task ids, one per line (the sweep indexes into it).
+
+num_envs: 512
+num_samples: 512
+seed: 42
+models: [0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1499]
+
+wandb:
+  project: "isaaclab_maze_eval"
+  group: "maze_serpentine_v1"  # only used if runs carry no tag
+  tags: ["maze_serpentine_v1", "maze", "serpentine"]
+
+# Fill in after training.
+runs: []

@@ -1,0 +1,16 @@
+# Eval config for Parkour-Scan-FreestandingBoulder-BVER-EVAL-v0; matches experiments/scan_freestanding_boulder_v1.yaml.
+# Checkpoints live under logs/rsl_rl/anymal_d_scan_freestanding_boulder; pass that as --checkpoint_base_path.
+# `runs:` lists checkpoint FOLDER names, not task ids, one per line (the sweep indexes into it).
+
+num_envs: 256
+num_samples: 512
+seed: 42
+models: [0, 300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 2999]
+
+wandb:
+  project: "isaaclab_parkour_scan_freestanding_boulder_eval"
+  group: "scan_freestanding_boulder_v1"  # only used if runs carry no tag
+  tags: ["scan_freestanding_boulder_v1", "bver"]
+
+# Fill in after training.
+runs: []

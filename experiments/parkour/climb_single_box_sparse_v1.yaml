@@ -1,0 +1,97 @@
+# Experiment: Parkour ClimbSingleBox sparse-reward BVER sweep (0.41 m box), bidir / fwd-only / bwd-only.
+# Sparse MDP is tracking_pos_sparse + termination only; xyz obs, so not obs-compatible with plain-observation tasks.
+# All arms share the same env and iteration budget so they are scale-matched.
+
+experiment:
+  name: "climb_single_box_sparse_v1_0p41"
+  description: "sparse reward (tracking_pos_sparse + termination only)(0.41m box height)"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_climb_single_box_sparse"
+    group: "climb_single_box_sparse_v1_0p41"
+    tags: ["climb_single_box_sparse_v1_0p41", "sparse", "0.41m", "low entropy"]
+
+# The task id's `0p41` token pins the box height; __post_init__ derives terrain, task space and start pool from it.
+
+defaults:
+  headless: true
+  num_envs: 8192
+  seeds: [829822, 579843, 128373, 985720]
+  max_iterations: 2000
+  logger: wandb
+
+runs:
+  - task: "Parkour-ClimbSingleBox-Baseline-sparse-0p41-v0"
+    run_name: "baseline"
+    max_iterations: 4000
+    tags: ["baseline", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-Random-sparse-0p41-v0"
+    run_name: "random"
+    max_iterations: 4000
+    tags: ["random", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+  
+  - task: "Parkour-ClimbSingleBox-RSI-sparse-0p41-v0"
+    run_name: "rsi"
+    tags: ["rsi", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-Backplay-sparse-0p41-v0"
+    run_name: "backplay"
+    tags: ["backplay", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.curriculum.initialization.max_step:
+        values: [300]
+
+  # BVER
+  - task: "Parkour-ClimbSingleBox-BVER-sparse-0p41-v0"
+    run_name: "bver_bidir"
+    tags: ["bver", "sparse", "noreach", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-BVER-fwd-sparse-0p41-v0"
+    run_name: "bver_fw_only"
+    tags: ["bver", "sparse", "noreach", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-BVER-bwd-sparse-0p41-v0"
+    run_name: "bver_bw_only"
+    tags: ["bver", "sparse", "noreach", "bw_only"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  # Bidir arm with the non-contact penalty subset (incl. dof_acc) active from step 0.
+  - task: "Parkour-ClimbSingleBox-BVER-pen-sparse-0p41-v0"
+    run_name: "bver_bidir_pen"
+    tags: ["bver", "sparse", "noreach", "bidir", "pen"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  # RC
+  - task: "Parkour-ClimbSingleBox-RC-sparse-0p41-v0"
+    run_name: "rc"
+    max_iterations: 4000
+    tags: ["rc", "sparse", "gaussian noise"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  

@@ -1,0 +1,55 @@
+# Eval config for Parkour-ClimbSingleBox-BVER-sparse-ROBUSTEVAL-scale05-0p41-v0.
+# Matches experiments/parkour/climb_single_box_sparse_scale05_v1.yaml; the perturbation grid is tuned here only.
+# Checkpoints live under logs/rsl_rl/anymal_d_climb_box_sparse; `runs:` lists checkpoint FOLDER names, not task ids.
+
+num_envs: 512
+num_samples: 512
+seed: 42
+models: [1999, 2000]
+
+results_suffix: robust
+
+wandb:
+  project: "isaaclab_parkour_climb_single_box_sparse_eval"
+  group: "climb_single_box_sparse_scale05_v1_0p41"  # only used if runs carry no tag
+  tags: ["climb_single_box_sparse_scale05_v1_0p41", "sparse", "scale05", "0p41", "robust"]
+
+# `push` adds a world-frame root velocity delta once at `t` s (vx toward the box); `alternate_sign` mirrors vy only.
+# Push times bracket the approach and the climb; an unperturbed `control` level is prepended automatically.
+# `yaw_init` rotates the spawn heading; not all arms train on yawed starts, so it measures start coverage.
+
+perturbations:
+  # Forward push, toward the box
+  - {name: push_xp_0p5_t1p0, push: {vx: 0.5, t: 1.0}}
+  - {name: push_xp_1p0_t1p0, push: {vx: 1.0, t: 1.0}}
+  - {name: push_xp_1p5_t1p0, push: {vx: 1.5, t: 1.0}}
+  - {name: push_xp_2p0_t1p0, push: {vx: 2.0, t: 1.0}}
+  - {name: push_xp_0p5_t2p0, push: {vx: 0.5, t: 2.0}}
+  - {name: push_xp_1p0_t2p0, push: {vx: 1.0, t: 2.0}}
+  - {name: push_xp_1p5_t2p0, push: {vx: 1.5, t: 2.0}}
+  - {name: push_xp_2p0_t2p0, push: {vx: 2.0, t: 2.0}}
+  # Backward push, away from the box
+  - {name: push_xn_0p5_t1p0, push: {vx: -0.5, t: 1.0}}
+  - {name: push_xn_1p0_t1p0, push: {vx: -1.0, t: 1.0}}
+  - {name: push_xn_1p5_t1p0, push: {vx: -1.5, t: 1.0}}
+  - {name: push_xn_2p0_t1p0, push: {vx: -2.0, t: 1.0}}
+  - {name: push_xn_0p5_t2p0, push: {vx: -0.5, t: 2.0}}
+  - {name: push_xn_1p0_t2p0, push: {vx: -1.0, t: 2.0}}
+  - {name: push_xn_1p5_t2p0, push: {vx: -1.5, t: 2.0}}
+  - {name: push_xn_2p0_t2p0, push: {vx: -2.0, t: 2.0}}
+  # Lateral push, both sides within each level
+  - {name: push_yl_0p5_t1p0, push: {vy: 0.5, t: 1.0}, alternate_sign: true}
+  - {name: push_yl_1p0_t1p0, push: {vy: 1.0, t: 1.0}, alternate_sign: true}
+  - {name: push_yl_1p5_t1p0, push: {vy: 1.5, t: 1.0}, alternate_sign: true}
+  - {name: push_yl_2p0_t1p0, push: {vy: 2.0, t: 1.0}, alternate_sign: true}
+  - {name: push_yl_0p5_t2p0, push: {vy: 0.5, t: 2.0}, alternate_sign: true}
+  - {name: push_yl_1p0_t2p0, push: {vy: 1.0, t: 2.0}, alternate_sign: true}
+  - {name: push_yl_1p5_t2p0, push: {vy: 1.5, t: 2.0}, alternate_sign: true}
+  - {name: push_yl_2p0_t2p0, push: {vy: 2.0, t: 2.0}, alternate_sign: true}
+  # Yawed spawn, both directions within each level
+  - {name: yaw_30, yaw_init: 0.5236, alternate_sign: true}
+  - {name: yaw_60, yaw_init: 1.0472, alternate_sign: true}
+  - {name: yaw_90, yaw_init: 1.5708, alternate_sign: true}
+
+# Fill in after training.
+runs: []

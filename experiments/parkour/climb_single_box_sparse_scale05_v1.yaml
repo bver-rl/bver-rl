@@ -1,0 +1,75 @@
+# Experiment: Parkour ClimbSingleBox sparse BVER at action scale 0.5 (0.41 m box), bidir arms plus a PPO control.
+# Tests whether the doubled joint_pos scale drives jitter; raw init_noise_std and OU alphas are doubled to match.
+# Separate file because train.py resolves run entries by task id, first match; action_rate is left uncompensated.
+
+experiment:
+  name: "climb_single_box_sparse_scale05_v1_0p41"
+  description: "sparse BVER bidir at action scale 0.5, raw exploration gains doubled (0.41m box height)"
+  hypothesis: "halving the policy gain at constant physical exploration removes aggression/jitter"
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_climb_single_box_sparse"
+    group: "climb_single_box_sparse_scale05_v1_0p41"
+    tags: ["climb_single_box_sparse_scale05_v1_0p41", "sparse", "0.41m", "scale05"]
+
+# The task id's `0p41` token pins the box height; __post_init__ derives terrain, task space and start pool from it.
+
+defaults:
+  headless: true
+  num_envs: 8192
+  seeds: [572857, 525934]
+  max_iterations: 2000
+  logger: wandb
+
+runs:
+  # Unpenalized sparse arm at scale 0.5: the clean gain test, no action_rate term to confound it.
+  - task: "Parkour-ClimbSingleBox-BVER-sparse-0p41-v0"
+    run_name: "bver_bidir_scale05"
+    tags: ["bver", "sparse", "noreach", "bidir", "scale05"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.actions.joint_pos.scale:
+        values: [0.5]
+      agent.policy.init_noise_std:
+        values: [4.0]
+      agent.random_action_noise_forward.alpha:
+        values: [20.0]
+      agent.random_action_noise_backward.alpha:
+        values: [20.0]
+
+  # Penalized sparse arm at scale 0.5 as a grid over dof_acc, the one frequency-selective penalty.
+  - task: "Parkour-ClimbSingleBox-BVER-pen-sparse-0p41-v0"
+    run_name: "bver_bidir_pen_scale05"
+    tags: ["bver", "sparse", "noreach", "bidir", "pen", "scale05", "dof_acc_ablation"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.actions.joint_pos.scale:
+        values: [0.5]
+      agent.policy.init_noise_std:
+        values: [4.0]
+      agent.random_action_noise_forward.alpha:
+        values: [20.0]
+      agent.random_action_noise_backward.alpha:
+        values: [20.0]
+      # sw0: joint-acceleration penalty on (cfg weight); sw1: off
+      env.rewards.dof_acc.weight:
+        values: [-2.5e-7, 0.0]
+      # Uncomment to hold action_rate's physical strength at the scale-1.0 level (raw weight / 4):
+      # env.rewards.action_rate.weight:
+      #   values: [-0.0025]
+
+  # Uninformed PPO control on the penalized stack at the same scale and doubled raw std; it has no OU noise to rescale.
+  - task: "Parkour-ClimbSingleBox-Baseline-pen-sparse-0p41-v0"
+    run_name: "baseline_pen_scale05"
+    max_iterations: 1000
+    tags: ["baseline", "sparse", "pen", "scale05"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.actions.joint_pos.scale:
+        values: [0.5]
+      agent.policy.init_noise_std:
+        values: [4.0]

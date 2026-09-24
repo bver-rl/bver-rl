@@ -1,0 +1,1 @@
+from .maze_terrains_cfg import MeshMazeTerrainCfg

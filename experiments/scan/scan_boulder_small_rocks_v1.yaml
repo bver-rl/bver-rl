@@ -1,0 +1,74 @@
+# Experiment: scan boulder_small_rocks, a boulder out of rocky ground climbed to its top plateau. Enlarged 2x.
+# BVER bidir/fwd/bwd, PPO baseline and matched RandomGS controls on a fenced scan raster with xyz/yaw obs.
+# Purely sparse climb-campaign MDP (no `progress` term); start and goal poses are PROVISIONAL.
+
+experiment:
+  name: "scan_boulder_small_rocks_v1"
+  description: "BVER ablation on the boulder_small_rocks scan"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_scan_boulder_small_rocks"
+    group: "scan_boulder_small_rocks_v1"
+    tags: ["scan_boulder_small_rocks_v1", "low entropy"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [525934, 239914, 572857]
+  max_iterations: 2000
+  logger: wandb
+
+runs:
+
+  - task: "Parkour-Scan-BoulderSmallRocks-BVER-v0"
+    run_name: "bver_bidir"
+    tags: ["bver", "bidir"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  - task: "Parkour-Scan-BoulderSmallRocks-BVER-fwd-v0"
+    run_name: "bver_fw_only"
+    tags: ["bver", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  - task: "Parkour-Scan-BoulderSmallRocks-BVER-bwd-v0"
+    run_name: "bver_bw_only"
+    tags: ["bver", "bw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  - task: "Parkour-Scan-BoulderSmallRocks-Baseline-v0"
+    run_name: "baseline"
+    max_iterations: 1000
+    tags: ["baseline"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  # Matched uninformed controls; run Parkour-Scan-BoulderSmallRocks-GenFeasibleStarts-v0 first.
+  - task: "Parkour-Scan-BoulderSmallRocks-RandomGS-v0"
+    run_name: "random_gs_bidir"
+    tags: ["random_gs", "bidir"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  - task: "Parkour-Scan-BoulderSmallRocks-RandomGS-fwd-v0"
+    run_name: "random_gs_fw_only"
+    tags: ["random_gs", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+
+  - task: "Parkour-Scan-BoulderSmallRocks-RandomGS-bwd-v0"
+    run_name: "random_gs_bw_only"
+    tags: ["random_gs", "bw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]

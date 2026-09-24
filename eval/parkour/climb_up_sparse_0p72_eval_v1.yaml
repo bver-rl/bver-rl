@@ -1,0 +1,17 @@
+# Eval config for Parkour-ClimbSingleBox-BVER-sparse-EVAL-0p72-v0.
+# Matches experiments/parkour/climb_single_box_sparse_v1_72.yaml.
+# Checkpoints live under logs/rsl_rl/anymal_d_climb_box_sparse; pass that as --checkpoint_base_path.
+# `runs:` lists checkpoint FOLDER names, not task ids, one per line (the sweep indexes into it).
+
+num_envs: 256
+num_samples: 512
+seed: 42
+models: [0, 800, 1600, 2400, 3200, 4000, 4800, 5600, 6400, 7200, 7999]
+
+wandb:
+  project: "isaaclab_parkour_climb_single_box_sparse_eval"
+  group: "climb_single_box_sparse_v1_0p72"  # only used if runs carry no tag
+  tags: ["climb_single_box_sparse_v1_0p72", "sparse", "0p72"]
+
+# Fill in after training.
+runs: []

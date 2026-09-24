@@ -1,0 +1,45 @@
+# Experiment: Parkour ClimbSingleBox DOWN sparse-reward BVER sweep (0.41 m box), bidir / fwd-only / bwd-only.
+# Climb-down counterpart of the sparse climb-up campaign; xyz obs, so not obs-compatible with the dense tasks.
+# Climb-down is where bwd-only solves a barrier fwd-only cannot, so the arms are expected to separate.
+
+experiment:
+  name: "climb_single_box_down_sparse_v1_0p41"
+  description: "sparse reward (tracking_pos_sparse + termination only), climb-down (0.41m box height)"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_climb_single_box_down_sparse"
+    group: "climb_single_box_down_sparse_v1_0p41"
+    tags: ["climb_single_box_down_sparse_v1_0p41", "sparse", "down", "0.41m"]
+
+# The task id's `0p41` token pins the box height; __post_init__ derives terrain, task space and start pool from it.
+
+defaults:
+  headless: true
+  num_envs: 8192
+  seeds: [829822, 579843, 128373, 985720]
+  max_iterations: 2000
+  logger: wandb
+
+runs:
+  - task: "Parkour-ClimbSingleBoxDown-BVER-sparse-0p41-v0"
+    run_name: "bver_bidir_down"
+    tags: ["bver", "sparse", "noreach", "bidir", "down"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBoxDown-BVER-fwd-sparse-0p41-v0"
+    run_name: "bver_fw_only_down"
+    tags: ["bver", "sparse", "noreach", "fw_only", "down"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBoxDown-BVER-bwd-sparse-0p41-v0"
+    run_name: "bver_bw_only_down"
+    tags: ["bver", "sparse", "noreach", "bw_only", "down"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]

@@ -1,0 +1,110 @@
+# Written by informed-exploration/scripts/helpers/hanoi_solve_poses.py --layout p12
+layout: p12
+robot_cfg: FRANKA_PANDA_HIGH_PD_CFG
+joint_names:
+- panda_joint1
+- panda_joint2
+- panda_joint3
+- panda_joint4
+- panda_joint5
+- panda_joint6
+- panda_joint7
+joint_limits:
+- - -2.8973
+  - 2.8973
+- - -1.7628
+  - 1.7628
+- - -2.8973
+  - 2.8973
+- - -3.0718
+  - -0.0698
+- - -2.8973
+  - 2.8973
+- - -0.0175
+  - 3.7525
+- - -2.8973
+  - 2.8973
+hand_quat_wxyz:
+- 0.653281
+- -0.653281
+- 0.270598
+- -0.270598
+poses:
+  start:
+    joint_pos:
+    - 1.7501
+    - -1.0869
+    - -2.0093
+    - -2.4149
+    - 1.7994
+    - 2.4923
+    - -0.9401
+    ring_xyz_target:
+    - 0.6
+    - 0.15
+    - 0.135
+    ring_xyz_kinematic:
+    - 0.599981
+    - 0.150004
+    - 0.134974
+    ring_xyz_measured:
+    - 0.599981
+    - 0.150004
+    - 0.134974
+    error_m: 3.3e-05
+    hold_drift_rad: 0.0
+    min_limit_margin_rad: 0.6569
+    iterations: 0
+    converged: true
+  anchor:
+    joint_pos:
+    - 1.3938
+    - -1.1236
+    - -2.1094
+    - -2.101
+    - 0.892
+    - 2.2658
+    - -0.1491
+    ring_xyz_target:
+    - 0.6
+    - -0.15
+    - 0.135
+    ring_xyz_kinematic:
+    - 0.600011
+    - -0.150007
+    - 0.13502
+    ring_xyz_measured:
+    - 0.600011
+    - -0.150007
+    - 0.13502
+    error_m: 2.4e-05
+    hold_drift_rad: 0.0
+    min_limit_margin_rad: 0.6392
+    iterations: 0
+    converged: true
+  home:
+    joint_pos:
+    - 1.1921
+    - -0.8868
+    - -1.577
+    - -2.4704
+    - 1.342
+    - 2.5001
+    - -0.1973
+    ring_xyz_target:
+    - 0.6
+    - 0.0
+    - 0.3
+    ring_xyz_kinematic:
+    - 0.600017
+    - -2.5e-05
+    - 0.300026
+    ring_xyz_measured:
+    - 0.600017
+    - -2.5e-05
+    - 0.300026
+    error_m: 4.0e-05
+    hold_drift_rad: 0.0
+    min_limit_margin_rad: 0.6014
+    iterations: 0
+    converged: true

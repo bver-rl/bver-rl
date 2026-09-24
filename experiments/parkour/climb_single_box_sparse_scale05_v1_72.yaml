@@ -1,0 +1,48 @@
+# Experiment: penalized sparse BVER at action scale 0.5 on the 0.72 m box, transferring the 0.41 m jitter-free recipe.
+# Raw init_noise_std and OU alphas are doubled to keep physical exploration; action_rate is not compensated.
+# Judge jitter on the EVAL binding, and expansion via goal_solved_size against the scale-1.0 pen arm.
+
+experiment:
+  name: "climb_single_box_sparse_scale05_v1_0p72"
+  description: "penalized bidir sparse BVER at action scale 0.5 with doubled raw exploration gains (0.72m box height)"
+  hypothesis: "the scale-0.5 + dof_acc recipe transfers to the harder box without costing expansion"
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_climb_single_box_sparse"
+    group: "climb_single_box_sparse_scale05_v1_0p72"
+    tags: ["climb_single_box_sparse_scale05_v1_0p72", "sparse", "0.72m", "scale05", "dof_acc"]
+
+# The task id's `0p72` token pins the box height; __post_init__ derives terrain, task space and start pool from it.
+
+defaults:
+  headless: true
+  num_envs: 8192
+  seeds: [572857, 525934]
+  max_iterations: 8000
+  logger: wandb
+
+runs:
+  - task: "Parkour-ClimbSingleBox-BVER-pen-sparse-0p72-v0"
+    run_name: "bver_bidir_pen_scale05"
+    max_iterations: 8000
+    tags: ["bver", "sparse", "noreach", "bidir", "pen", "scale05", "dof_acc"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.actions.joint_pos.scale:
+        values: [0.5]
+      env.rewards.dof_acc.weight:
+        values: [-2.5e-7]
+      agent.policy.init_noise_std:
+        values: [4.0]
+      agent.random_action_noise_forward.alpha:
+        values: [20.0]
+      agent.random_action_noise_backward.alpha:
+        values: [20.0]
+      env.curriculum.initialization.p_start_from_solved:
+        values: [0.1]
+      env.curriculum.initialization.p_goal_candidate:
+        values: [0.9]
+      # agent.algorithm.entropy_coef:
+      #   values: [0.003]

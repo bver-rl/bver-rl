@@ -1,0 +1,58 @@
+# Experiment: scan freestanding_boulder at action scale 0.5 on the penalized sparse MDP (climb-box recipe transfer).
+# Overrides halve joint_pos.scale and double raw init_noise_std and OU alphas; action_rate is left uncompensated.
+# Render with the -PLAY-scale05-v0 binding; budget and seeds mirror scan_freestanding_boulder_v1.yaml.
+
+experiment:
+  name: "scan_freestanding_boulder_scale05_v1"
+  description: "BVER bidir on the freestanding_boulder scan, penalized sparse MDP, action scale 0.5 with doubled raw exploration gains"
+  hypothesis: "the climb-box scale-0.5 + dof_acc recipe transfers to a measured rock without costing expansion"
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_scan_freestanding_boulder"
+    group: "scan_freestanding_boulder_scale05_v1"
+    tags: ["scan_freestanding_boulder_scale05_v1", "scale05", "pen", "dof_acc", "higher"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [525934, 239914, 572857]
+  max_iterations: 8000
+  logger: wandb
+
+runs:
+  - task: "Parkour-Scan-FreestandingBoulder-BVER-pen-v0"
+    run_name: "bver_bidir_pen_scale05"
+    tags: ["bver", "bidir", "pen", "scale05", "dof_acc"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+      env.actions.joint_pos.scale:
+          values: [0.5]
+      env.rewards.dof_acc.weight:
+          values: [-2.5e-7]
+      agent.policy.init_noise_std:
+          values: [4.0]
+      agent.algorithm.entropy_coef:
+          values: [0.004]
+      agent.random_action_noise_forward.alpha:
+          values: [20.0]
+      agent.random_action_noise_backward.alpha:
+          values: [20.0]
+
+  # Matched uninformed PPO control on the same penalized MDP and overrides; it has no OU noise to rescale.
+  - task: "Parkour-Scan-FreestandingBoulder-Baseline-pen-v0"
+    run_name: "baseline_pen_scale05"
+    max_iterations: 1000
+    tags: ["baseline", "pen", "scale05", "dof_acc"]
+    sweep:
+      env.scene.num_envs:
+          values: [4096]
+      env.actions.joint_pos.scale:
+          values: [0.5]
+      env.rewards.dof_acc.weight:
+          values: [-2.5e-7]
+      agent.policy.init_noise_std:
+          values: [4.0]
+      agent.algorithm.entropy_coef:
+          values: [0.004]

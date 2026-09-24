@@ -1,0 +1,57 @@
+# Experiment: Franka Hanoi P12, bidirectional / forward-only / backward-only BVER vs PPO baseline and random control.
+# Arms differ only in how each reset picks start and goal; ring moves from the left peg to the right peg, episode 8 s.
+# Needs informed-exploration/data/hanoi/hanoi_p12_poses.yaml from scripts/helpers/hanoi_solve_poses.py.
+
+experiment:
+  name: "hanoi_p12_v1"
+  description: "Franka ring transfer between two pegs, BVER vs baseline vs random"
+  hypothesis: "bidirectional BVER beats both single-direction arms, since each tree owns one funnel"
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_hanoi"
+    group: "hanoi_p12_v1"
+    tags: ["hanoi", "p12", "bver"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [572857, 525934, 239914]
+  max_iterations: 600
+  logger: wandb
+
+runs:
+  - task: "Franka-Hanoi-P12-BVER-v0"
+    run_name: "p12_bver_bidir"
+    tags: ["bver", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Franka-Hanoi-P12-BVER-fwd-v0"
+    run_name: "p12_bver_fwd"
+    tags: ["bver", "fwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Franka-Hanoi-P12-BVER-bwd-v0"
+    run_name: "p12_bver_bwd"
+    tags: ["bver", "bwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Franka-Hanoi-P12-Baseline-v0"
+    run_name: "p12_baseline"
+    tags: ["baseline"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Franka-Hanoi-P12-Random-v0"
+    run_name: "p12_random"
+    tags: ["random"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]

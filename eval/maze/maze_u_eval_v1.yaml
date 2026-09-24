@@ -1,0 +1,16 @@
+# Eval config for Maze-U-EVAL-v0, matching experiments/maze/u.yaml.
+# Checkpoints live under logs/rsl_rl/maze; pass that as --checkpoint_base_path.
+# `runs:` lists checkpoint FOLDER names, not task ids, one per line (the sweep indexes into it).
+
+num_envs: 512
+num_samples: 512
+seed: 42
+models: [0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 599]
+
+wandb:
+  project: "isaaclab_maze_eval"
+  group: "maze_u_v1"  # only used if runs carry no tag
+  tags: ["maze_u_v1", "maze", "u"]
+
+# Fill in after training.
+runs: []

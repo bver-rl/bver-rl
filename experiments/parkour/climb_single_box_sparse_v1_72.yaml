@@ -1,0 +1,96 @@
+# Experiment: Parkour ClimbSingleBox sparse-reward BVER sweep (0.72 m box), bidir / fwd-only / bwd-only.
+# Sparse MDP is tracking_pos_sparse + termination only; xyz obs, so not obs-compatible with plain-observation tasks.
+# 0.72 m is the forward-exploration ceiling, so fwd-only is expected to fail against the bwd/bidir arms.
+
+experiment:
+  name: "climb_single_box_sparse_v1_0p72"
+  description: "sparse reward (tracking_pos_sparse + termination only) (0.72m box height)"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_climb_single_box_sparse"
+    group: "climb_single_box_sparse_v1_0p72"
+    tags: ["climb_single_box_sparse_v1_0p72", "sparse", "0.72m"]
+
+# The task id's `0p72` token pins the box height; __post_init__ derives terrain, task space and start pool from it.
+
+defaults:
+  headless: true
+  num_envs: 8192
+  seeds: [829822, 579843, 128373, 985720]
+  max_iterations: 5000
+  logger: wandb
+
+runs:
+  - task: "Parkour-ClimbSingleBox-BVER-sparse-0p72-v0"
+    run_name: "bver_bidir"
+    max_iterations: 8000
+    tags: ["bver", "sparse", "noreach", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-BVER-fwd-sparse-0p72-v0"
+    run_name: "bver_fw_only"
+    max_iterations: 8000
+    tags: ["bver", "sparse", "noreach", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-BVER-bwd-sparse-0p72-v0"
+    run_name: "bver_bw_only"
+    max_iterations: 8000
+    tags: ["bver", "sparse", "noreach", "bw_only"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-BVER-pen-sparse-0p72-v0"
+    run_name: "bver_bidir_pen"
+    max_iterations: 8000
+    tags: ["bver", "sparse", "noreach", "bidir", "pen"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-Baseline-sparse-0p72-v0"
+    run_name: "baseline"
+    tags: ["baseline", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-Random-sparse-0p72-v0"
+    run_name: "random"
+    max_iterations: 8000
+    tags: ["random", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-RSI-sparse-0p72-v0"
+    run_name: "rsi"
+    tags: ["rsi", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-RC-sparse-0p72-v0"
+    run_name: "rc"
+    tags: ["rc", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+
+  - task: "Parkour-ClimbSingleBox-Backplay-sparse-0p72-v0"
+    run_name: "backplay"
+    seeds: [572857, 525934, 239914]
+    max_iterations: 3000
+    tags: ["backplay", "sparse"]
+    sweep:
+      env.scene.num_envs:
+        values: [8192]
+      env.curriculum.initialization.max_step:
+        values: [1000]

@@ -1,0 +1,61 @@
+# Experiment: Maze Serpentine, bidirectional / forward-only / backward-only BVER vs PPO baseline and random control.
+# Arms differ only in how each reset picks start and goal; the random control samples the wall-filtered maze.
+# Layout: serpentine_maze, one forced 28-cell detour, 28 s shortest path; episode 42.0 s.
+
+experiment:
+  name: "maze_serpentine_v1"
+  description: "point-mass Serpentine maze, BVER vs baseline vs random"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_maze"
+    group: "maze_serpentine_v1"
+    tags: ["maze", "serpentine", "bver"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [572857, 525934, 239914, 8127456, 1917461]
+  max_iterations: 1500
+  logger: wandb
+
+runs:
+  - task: "Maze-Serpentine-BVER-v0"
+    run_name: "serpentine_bver_bidir_g0"
+    tags: ["bver", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+      env.curriculum.initialization.goal_connect_ratio:
+        values: [0.0]
+      env.curriculum.initialization.start_connect_ratio:
+        values: [0.0]
+
+  - task: "Maze-Serpentine-BVER-fwd-v0"
+    run_name: "serpentine_bver_fwd"
+    tags: ["bver", "fwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-Serpentine-BVER-bwd-v0"
+    run_name: "serpentine_bver_bwd"
+    tags: ["bver", "bwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-Serpentine-Baseline-v0"
+    run_name: "serpentine_baseline"
+    tags: ["baseline"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-Serpentine-Random-v0"
+    run_name: "serpentine_random"
+    tags: ["random"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]

@@ -1,0 +1,16 @@
+# Eval config for Parkour-Scan-RockyAscent-BVER-EVAL-v0, matching experiments/scan_rocky_ascent_v1.yaml.
+# Checkpoints live under logs/rsl_rl/anymal_d_scan_rocky_ascent; pass that as --checkpoint_base_path.
+# `runs:` lists checkpoint FOLDER names, not task ids, one per line (the sweep indexes into it).
+
+num_envs: 256
+num_samples: 512
+seed: 42
+models: [0, 400, 800, 1200, 1600, 2000, 2400, 2800, 3200, 3600, 3999]
+
+wandb:
+  project: "isaaclab_parkour_scan_rocky_ascent_eval"
+  group: "scan_rocky_ascent_v1"  # only used if runs carry no tag
+  tags: ["scan_rocky_ascent_v1", "bver"]
+
+# Fill in after training.
+runs: []

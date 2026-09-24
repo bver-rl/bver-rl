@@ -1,0 +1,96 @@
+# Experiment: DTSG bridge terrain (one goal, three circumventable routes on floor-level platforms), BVER ablation.
+# Terrain difficulty and direction are fixed; BVER explores in state space, so this tests route choice.
+# All DTSG tasks observe env-relative base xyz and yaw, since route choice is aliased without localization.
+
+experiment:
+  name: "bridge_dtsg_v1"
+  description: "BVER ablation on tuned terrain"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_parkour_bridge_dtsg"
+    group: "bridge_dtsg_v1"
+    tags: ["bridge_dtsg_v1", "bver"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [239914, 164126, 789123]
+  max_iterations: 2000
+  logger: wandb
+
+runs:
+  - task: "Parkour-BridgeDTSG-BVER-v0"
+    run_name: "bver_bidir"
+    tags: ["bver", "bidir", "reward band"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+      # env.curriculum.initialization.goal_connect_ratio:
+      #   values: [0.0]
+      # env.curriculum.initialization.start_connect_ratio:
+      #   values: [0.0]
+      # env.curriculum.initialization.brownian_horizon_forward:
+      #   values: [128]
+      # env.curriculum.initialization.brownian_horizon_backward:
+      #   values: [128]
+
+  - task: "Parkour-BridgeDTSG-BVER-fwd-v0"
+    run_name: "bver_fw_only"
+    tags: ["bver", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  - task: "Parkour-BridgeDTSG-BVER-bwd-v0"
+    run_name: "bver_bw_only"
+    tags: ["bver", "bw_only", "reward band"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  - task: "Parkour-BridgeDTSG-Baseline-v0"
+    run_name: "baseline"
+    tags: ["baseline"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  # Baseline with a 4x entropy bonus, its only exploration lever without a curriculum.
+  - task: "Parkour-BridgeDTSG-Baseline-hient-v0"
+    run_name: "baseline_hient"
+    tags: ["baseline", "hient"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  # Uninformed random (start, goal) controls matched to the BVER arms; need data/parkour/feasible_starts_dtsg.pkl.
+  - task: "Parkour-BridgeDTSG-RandomGS-v0"
+    run_name: "random_gs_bidir"
+    tags: ["random_gs", "bidir"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  - task: "Parkour-BridgeDTSG-RandomGS-fwd-v0"
+    run_name: "random_gs_fw_only"
+    tags: ["random_gs", "fw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  - task: "Parkour-BridgeDTSG-RandomGS-bwd-v0"
+    run_name: "random_gs_bw_only"
+    tags: ["random_gs", "bw_only"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]
+
+  # RSI replays a fixed pool of harvested expert states; build it with scripts/helpers/build_dtsg_rsi_pool.py first.
+  - task: "Parkour-BridgeDTSG-RSI-v0"
+    run_name: "rsi"
+    tags: ["rsi"]
+    sweep:
+      env.scene.num_envs:
+          values: [8192]

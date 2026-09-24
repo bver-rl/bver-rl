@@ -1,0 +1,61 @@
+# Experiment: Maze U, bidirectional / forward-only / backward-only BVER vs PPO baseline and random control.
+# Arms differ only in how each reset picks start and goal; the random control samples the wall-filtered maze.
+# Layout: u_maze (rllab-curriculum maze_id 0 / mujoco-maze UMaze), 6 s shortest path; episode 9.0 s.
+
+experiment:
+  name: "maze_u_v1"
+  description: "point-mass U maze, BVER vs baseline vs random"
+  hypothesis: ""
+  author: ""
+  date: ""
+  wandb:
+    project: "isaaclab_maze"
+    group: "maze_u_v1"
+    tags: ["maze", "u", "bver"]
+
+defaults:
+  headless: true
+  num_envs: 4096
+  seeds: [572857, 525934, 239914, 8127456, 1917461]
+  max_iterations: 600
+  logger: wandb
+
+runs:
+  - task: "Maze-U-BVER-v0"
+    run_name: "u_bver_bidir_g1"
+    tags: ["bver", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+      env.curriculum.initialization.goal_connect_ratio:
+        values: [1.0]
+      env.curriculum.initialization.start_connect_ratio:
+        values: [1.0]
+
+  - task: "Maze-U-BVER-fwd-v0"
+    run_name: "u_bver_fwd"
+    tags: ["bver", "fwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-U-BVER-bwd-v0"
+    run_name: "u_bver_bwd"
+    tags: ["bver", "bwd"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-U-Baseline-v0"
+    run_name: "u_baseline"
+    tags: ["baseline"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  - task: "Maze-U-Random-v0"
+    run_name: "u_random"
+    tags: ["random"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
