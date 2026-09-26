@@ -60,6 +60,9 @@ from .scan_naming import pool_path
 SCAN_EVAL_XY_HALF = 0.2
 """Half-width of the initial-state patch around the start pose, over which the success rate is measured."""
 
+SCAN_BROWNIAN_HORIZON = 64
+"""Forward and backward walk length in policy steps on every scan BVER arm, as on box climbing."""
+
 PLAY_EPISODE_TIME_S = 7.0
 """Seconds per episode on the PLAY bindings.
 
@@ -350,6 +353,8 @@ class ScanEnvCfg_BVER(ScanEnvCfg):
         super().__post_init__()
         apply_bver_goal_conditioning(self)
         _apply_scan_anchor_yaw(self)
+        self.curriculum.initialization.brownian_horizon_forward = SCAN_BROWNIAN_HORIZON
+        self.curriculum.initialization.brownian_horizon_backward = SCAN_BROWNIAN_HORIZON
 
 
 @configclass

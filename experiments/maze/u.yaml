@@ -22,8 +22,27 @@ defaults:
 
 runs:
   - task: "Maze-U-BVER-v0"
-    run_name: "u_bver_bidir_g1"
+    run_name: "u_bver_bidir"
     tags: ["bver", "bidir"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+
+  # Connect-ratio ablation (the default above is 0.5): seed only from task-space samples, or only greedily
+  - task: "Maze-U-BVER-v0"
+    run_name: "u_bver_bidir_connect0"
+    tags: ["bver", "bidir", "connect ablation"]
+    sweep:
+      env.scene.num_envs:
+        values: [4096]
+      env.curriculum.initialization.goal_connect_ratio:
+        values: [0.0]
+      env.curriculum.initialization.start_connect_ratio:
+        values: [0.0]
+
+  - task: "Maze-U-BVER-v0"
+    run_name: "u_bver_bidir_connect1"
+    tags: ["bver", "bidir", "connect ablation"]
     sweep:
       env.scene.num_envs:
         values: [4096]

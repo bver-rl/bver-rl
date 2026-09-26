@@ -53,8 +53,8 @@ class TerrainBVERCurriculumCfg:
         fwd_exploit_envs_ratio=0.15,
         bwd_explore_envs_ratio=0.35,
         bwd_exploit_envs_ratio=0.15,
-        goal_connect_ratio=0.0,
-        start_connect_ratio=0.0,
+        goal_connect_ratio=0.5,
+        start_connect_ratio=0.5,
         **_BVER_FROM_SOLVED_KWARGS,
     )
 

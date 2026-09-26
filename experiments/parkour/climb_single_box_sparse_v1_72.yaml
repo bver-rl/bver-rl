@@ -18,7 +18,7 @@ experiment:
 defaults:
   headless: true
   num_envs: 8192
-  seeds: [829822, 579843, 128373, 985720]
+  seeds: [829822, 579843, 128373, 985720, 572857]
   max_iterations: 5000
   logger: wandb
 
@@ -86,7 +86,7 @@ runs:
 
   - task: "Parkour-ClimbSingleBox-Backplay-sparse-0p72-v0"
     run_name: "backplay"
-    seeds: [572857, 525934, 239914]
+    seeds: [572857, 525934, 239914, 8127456, 1917461]
     max_iterations: 3000
     tags: ["backplay", "sparse"]
     sweep:

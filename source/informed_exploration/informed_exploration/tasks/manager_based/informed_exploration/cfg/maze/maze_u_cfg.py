@@ -31,8 +31,8 @@ BROWNIAN_HORIZONS = (80, 80)
 
 # U-only BVER knobs, overriding `_BVER_MAZE_KWARGS` on this layout's three BVER arms
 BVER_OVERRIDES = {
-    "r_min": 0.1,
-    "r_max": 0.85,
+    "r_min": 0.02,
+    "r_max": 0.95,
     "goal_connect_ratio": 0.5,
     "start_connect_ratio": 0.5,
     "goal_replay_ratio": 0.2,

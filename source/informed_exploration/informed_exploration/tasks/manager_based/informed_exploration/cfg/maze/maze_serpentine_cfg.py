@@ -27,12 +27,12 @@ from .maze_arms import (
 MAZE_NAME = "serpentine_maze"
 EPISODE_S = 32.0
 # Forward and backward walk lengths in policy steps
-BROWNIAN_HORIZONS = (80, 80)
+BROWNIAN_HORIZONS = (200, 200)
 
 # Serpentine-only BVER knobs; a nonzero replay ratio lets mixed buffers carry solved pairs
 BVER_OVERRIDES = {
-    "r_min": 0.1,
-    "r_max": 0.85,
+    "r_min": 0.02,
+    "r_max": 0.95,
     "goal_connect_ratio": 0.5,
     "start_connect_ratio": 0.5,
     "goal_replay_ratio": 0.2,

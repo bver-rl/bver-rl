@@ -18,7 +18,7 @@ experiment:
 defaults:
   headless: true
   num_envs: 8192
-  seeds: [572857, 525934]
+  seeds: [572857, 525934, 239914, 8127456, 1917461]
   max_iterations: 2000
   logger: wandb
 
